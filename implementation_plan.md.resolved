@@ -1,0 +1,62 @@
+# ELEFRIENDS SRI LANKA - Safari Tour Booking Website
+
+This plan details the folder structure and setup for a high-performance Next.js 14 application tailored for safari tour bookings, adhering to a premium dark-themed glassmorphism aesthetic.
+
+## Proposed File Structure
+
+We will use the **Next.js App Router** with the `src` directory to keep our components and logic separated from configuration files.
+
+```text
+elefriends-safari/
+├── public/                 # Static assets (images, icons)
+│   └── locales/            # Translation files if not using next-intl built-in dictionary
+├── src/
+│   ├── app/                # Next.js App Router
+│   │   ├── [locale]/       # Dynamic route segment for internationalization
+│   │   │   ├── admin/      # Admin Dashboard (Protected Route)
+│   │   │   │   ├── bookings/
+│   │   │   │   ├── tours/
+│   │   │   │   └── page.tsx
+│   │   │   ├── checkout/   # Booking & Payment Flow
+│   │   │   │   └── page.tsx
+│   │   │   ├── tours/      # Safari Packages
+│   │   │   │   ├── [id]/
+│   │   │   │   │   └── page.tsx
+│   │   │   │   └── page.tsx
+│   │   │   ├── layout.tsx  # Global layout (Nav, Footer, Providers)
+│   │   │   └── page.tsx    # Landing Page (Hero, Destination Cards)
+│   │   ├── api/            # API Routes
+│   │   │   ├── checkout/   # Stripe/PayHere webhooks and checkout init
+│   │   │   └── webhooks/
+│   │   └── globals.css     # Global styles & Tailwind layers (Glassmorphism utils)
+│   ├── components/         # Reusable UI components
+│   │   ├── ui/             # Base UI elements (Buttons, Inputs, Cards)
+│   │   ├── layout/         # Navbar, Footer, Sidebar
+│   │   ├── home/           # HeroSection, DestinationCards
+│   │   ├── booking/        # BookingForm, PaymentSummary
+│   │   └── admin/          # Admin tables, forms
+│   ├── lib/                # Utility functions & Configurations
+│   │   ├── supabase/       # Supabase client setup (or prisma/)
+│   │   ├── stripe/         # Stripe client setup (or payhere/)
+│   │   └── utils.ts        # Helper functions (classnames, formatting)
+│   ├── messages/           # next-intl translation dictionaries (en.json, de.json, fr.json)
+│   ├── types/              # TypeScript interfaces (Tour, Booking, User)
+│   ├── i18n.ts             # next-intl configuration
+│   └── middleware.ts       # Middleware for i18n routing and Auth protection
+├── .env.local              # Environment variables
+├── next.config.mjs         # Next.js configuration
+├── tailwind.config.ts      # Tailwind CSS configuration
+└── package.json            # Project dependencies
+```
+
+## User Review Required
+
+> [!IMPORTANT]
+> Please review the file structure above. Let me know if you would like me to proceed with generating the boilerplate code.
+
+I have a couple of quick questions before we start the boilerplate:
+1. Is **Stripe** or **PayHere** preferred for the payment gateway?
+2. Should we use **Supabase** or **Prisma** (with another Postgres provider) for the backend?
+
+## Verification Plan
+After scaffolding the project, we will run the local dev server using `npm run dev` and ensure the Next.js shell and basic routing are functional at `http://localhost:3000`. We will also configure the initial Tailwind theme and test that the dark mode and glassmorphism utilities compile properly.

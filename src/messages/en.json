@@ -1,0 +1,16 @@
+{
+  "Navigation": {
+    "home": "Home",
+    "tours": "Safari Packages",
+    "contact": "Contact Us"
+  },
+  "HomePage": {
+    "title": "Explore the Wild with ELEFRIENDS",
+    "subtitle": "Experience the ultimate safari adventure in Sri Lanka.",
+    "cta": "Explore Packages"
+  },
+  "Tours": {
+    "title": "Our Premium Safari Packages",
+    "bookNow": "Book Now"
+  }
+}

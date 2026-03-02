@@ -1,0 +1,36 @@
+# ELEFRIENDS Safari Tour Booking Website
+
+## Milestones
+
+- [ ] **Phase 1: Planning & Project Initialization**
+  - [x] Define folder structure and initial architecture plan
+  - [ ] Get user approval on the implementation plan
+  - [ ] Initialize Next.js 14 project (App Router) with Tailwind CSS
+  - [ ] Install dependencies (Framer Motion, next-intl, Supabase/Prisma, Stripe/PayHere)
+
+- [ ] **Phase 2: Foundation & UI Shell**
+  - [ ] Set up global CSS for Dark Theme & Glassmorphism
+  - [ ] Create Navigation Bar (with Multi-language Switcher: EN, DE, FR)
+  - [ ] Create Footer
+
+- [ ] **Phase 3: Landing Page Implementation**
+  - [ ] Hero Section with "Explore Packages" CTA
+  - [ ] Dynamic Destination Cards (Minneriya, Kaudulla, Eco Hurulu Park, Habarana Village)
+  - [ ] Ensure 100% Mobile Responsiveness
+
+- [ ] **Phase 4: Safari Packages & Booking Flow**
+  - [ ] Safari Packages Listing page
+  - [ ] Individual Tour Selection (Morning/Afternoon/Full Day)
+  - [ ] Checkout form with 25% Advance Payment Logic calculation
+  - [ ] Integration with Payment Gateway (process deposit, send automated email)
+
+- [ ] **Phase 5: Backend & Admin Dashboard**
+  - [ ] Set up Database Schema (Supabase/Prisma)
+  - [ ] Admin: Tour Manager (CRUD operations for packages, prices, descriptions)
+  - [ ] Admin: Booking Manager (Table tracking bookings: Paid Deposit vs Pending Balance)
+  - [ ] Admin: Language Editor (Update translations easily)
+
+- [ ] **Phase 6: Performance & Optimization**
+  - [ ] Image Optimization (`next/image`)
+  - [ ] Code Splitting
+  - [ ] Target 90+ Lighthouse score
