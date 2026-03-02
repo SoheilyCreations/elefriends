@@ -6,8 +6,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { tourService } from '@/lib/services/tourService';
 import { Tour } from '@/types';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function AdminTours() {
+    const router = useRouter();
     const [tours, setTours] = useState<Tour[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
