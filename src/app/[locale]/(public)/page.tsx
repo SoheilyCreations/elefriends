@@ -76,15 +76,15 @@ export default function HomePage() {
                     <motion.div 
                         initial={{ opacity: 0, scale: 0.9, y: 30 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
-                        className="w-full max-w-[400px] aspect-[9/16] md:max-w-none md:w-auto md:h-[80vh] bg-black rounded-[2rem] overflow-hidden shadow-[0_0_60px_rgba(16,185,129,0.2)] relative border border-white/10"
+                        className="w-[95vw] md:w-[85vw] max-w-5xl aspect-video bg-black rounded-[2rem] overflow-hidden shadow-[0_0_60px_rgba(16,185,129,0.3)] relative border border-white/10"
                     >
                         <iframe 
                             width="100%" 
                             height="100%" 
-                            src="https://www.youtube.com/embed/MiP2wbXvqvk?autoplay=1&controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=0&playsinline=1&loop=1&playlist=MiP2wbXvqvk" 
+                            src="https://player.vimeo.com/video/1175789228?autoplay=1&loop=1&title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479" 
                             title="Elephant Safari Film" 
-                            className="absolute inset-0 w-full h-full scale-[1.05]"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            className="absolute inset-0 w-full h-full"
+                            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" 
                             allowFullScreen
                         ></iframe>
                     </motion.div>
