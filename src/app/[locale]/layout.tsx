@@ -1,6 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { Inter } from 'next/font/google';
+import SmoothScrollProvider from '@/components/providers/SmoothScrollProvider';
 import '../globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -24,7 +25,9 @@ export default async function RootLayout({
         <html lang={locale}>
             <body className={`${inter.className} min-h-screen flex flex-col antialiased bg-[#f0f2f5]`}>
                 <NextIntlClientProvider locale={locale} messages={messages}>
-                    {children}
+                    <SmoothScrollProvider>
+                        {children}
+                    </SmoothScrollProvider>
                 </NextIntlClientProvider>
             </body>
         </html>

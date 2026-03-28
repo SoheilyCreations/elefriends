@@ -12,8 +12,8 @@ import TestimonialsSection from '@/components/home/TestimonialsSection';
 import { ShieldCheck, UserCheck, Car, Award, ArrowRight, Play, Compass, Map, Sparkles } from 'lucide-react';
 import { ElephantIcon } from '@/components/icons/ElephantIcon';
 import { SriLankanMap, LiyawelPattern } from '@/components/icons/HeritageIcons';
-import { destinationService } from '@/lib/services/destinationService';
 import { Destination } from '@/types';
+import WordReveal from '@/components/animations/WordReveal';
 
 export default function HomePage() {
     const heroRef = useRef<HTMLElement>(null);
@@ -218,13 +218,29 @@ export default function HomePage() {
                         transition={{ duration: 1, ease: "circOut" }}
                         className="relative"
                     >
-                        <h1 className="font-black tracking-tighter mb-4 text-white uppercase drop-shadow-[0_25px_60px_rgba(0,0,0,0.8)] flex flex-col items-start">
-                            <span className="text-3xl md:text-5xl lg:text-[4rem] leading-none mb-1 opacity-90">In to the</span>
+                        <h1 className="font-black tracking-tighter mb-4 text-white uppercase drop-shadow-[0_25px_60px_rgba(0,0,0,0.8)] flex flex-col items-start overflow-hidden">
+                            <WordReveal 
+                                text="In to the" 
+                                className="text-3xl md:text-5xl lg:text-[4rem] leading-none mb-1 opacity-90" 
+                                delay={0.2}
+                            />
                             <div className="flex items-baseline gap-4 mb-2">
-                                <span className="text-6xl md:text-7xl lg:text-[8rem] text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600 italic leading-[0.8] drop-shadow-none pr-4">World</span>
-                                <span className="text-3xl md:text-5xl lg:text-[4rem] opacity-90">of</span>
+                                <WordReveal 
+                                    text="World" 
+                                    className="text-6xl md:text-7xl lg:text-[8rem] text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600 italic leading-[0.8] drop-shadow-none pr-4" 
+                                    delay={0.4}
+                                />
+                                <WordReveal 
+                                    text="of" 
+                                    className="text-3xl md:text-5xl lg:text-[4rem] opacity-90" 
+                                    delay={0.6}
+                                />
                             </div>
-                            <span className="text-5xl md:text-7xl lg:text-[6.5rem] leading-[0.85]">Gentle Giants</span>
+                            <WordReveal 
+                                text="Gentle Giants" 
+                                className="text-5xl md:text-7xl lg:text-[6.5rem] leading-[0.85]" 
+                                delay={0.8}
+                            />
                         </h1>
 
                         {/* Immersive Floating Badge */}
@@ -336,10 +352,15 @@ export default function HomePage() {
                                 <Compass className="w-4 h-4" />
                                 Iconic Habitats
                             </h2>
-                            <h3 className="text-5xl md:text-7xl font-black text-[#0b1315] uppercase tracking-tighter leading-[0.8]">
-                                The Wild<br />
-                                <span className="text-emerald-500 italic lowercase tracking-tight">destinations</span>
-                            </h3>
+                             <WordReveal 
+                                text="The Wild" 
+                                className="text-5xl md:text-7xl font-black text-[#0b1315] uppercase tracking-tighter leading-[0.8]" 
+                             />
+                             <WordReveal 
+                                text="destinations" 
+                                className="text-emerald-500 italic lowercase tracking-tight text-5xl md:text-7xl font-black" 
+                                delay={0.3}
+                             />
                         </div>
                         <Link href="/destinations" className="group flex items-center gap-4 bg-[#f8f9fa] border border-gray-100 p-6 rounded-3xl hover:bg-emerald-500 hover:border-emerald-500 transition-all duration-300">
                             <span className="text-[#0b1315] font-black text-xs uppercase tracking-widest group-hover:text-white">View All Zones</span>

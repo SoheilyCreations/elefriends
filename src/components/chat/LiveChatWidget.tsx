@@ -41,10 +41,10 @@ export default function LiveChatWidget() {
     useEffect(() => {
         if (!sessionId && messages.length === 0) {
             setMessages([
-                { id: '1', sender_type: 'agent', content: 'Hi there! 👋 How can we help you plan your safari today?', created_at: new Date().toISOString() }
+                { id: 'greeting', sender_type: 'agent', content: 'Hi there! 👋 How can we help you plan your safari today?', created_at: new Date().toISOString() }
             ]);
         }
-    }, [sessionId, messages.length]);
+    }, [sessionId]);
 
     // Scroll to bottom when messages update
     useEffect(() => {
@@ -103,20 +103,26 @@ export default function LiveChatWidget() {
                 setSessionId(activeSessionId);
             }
 
-            // Create temporary message for snappy UI
-            const tempId = 'temp_' + Date.now();
-            setMessages(prev => [...prev, { id: tempId, sender_type: 'visitor', content, created_at: new Date().toISOString() }]);
-
             // Push to db
-            const { error } = await supabase
+            const { data: newMsg, error } = await supabase
                 .from('chat_messages')
                 .insert({
                     session_id: activeSessionId,
                     sender_type: 'visitor',
                     content: content
-                });
+                })
+                .select()
+                .single();
                 
             if (error) throw error;
+
+            // Manually add to list if subscription hasn't caught it yet
+            if (newMsg) {
+                setMessages(prev => {
+                    if (prev.find(m => m.id === newMsg.id)) return prev;
+                    return [...prev, newMsg];
+                });
+            }
             
         } catch (error) {
             console.error('Error sending message:', error);
@@ -195,8 +201,14 @@ export default function LiveChatWidget() {
                             ))}
                             {isTyping && (
                                 <div className="flex items-end gap-2">
-                                    <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 mb-1">
-                                        <Bot className="w-3.5 h-3.5 text-emerald-600" />
+                                    <div className="w-6 h-6 rounded-full overflow-hidden border border-emerald-500/10 shrink-0 mb-1">
+                                        <Image 
+                                            src="/img/agent_avatar.png" 
+                                            alt="Agent" 
+                                            width={24} 
+                                            height={24} 
+                                            className="object-cover"
+                                        />
                                     </div>
                                     <div className="bg-white border border-gray-100 shadow-sm px-4 py-3 rounded-2xl rounded-tl-[4px] flex items-center gap-1.5">
                                         <div className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce" />
