@@ -156,8 +156,15 @@ const mapDestinations: MapDestination[] = [
     }
 ];
 
-export default function DestinationMap() {
+export default function DestinationMap({ onHoverChange }: { onHoverChange?: (slug: string | null) => void }) {
     const [hoveredId, setHoveredId] = useState<string | null>(null);
+
+    React.useEffect(() => {
+        if (onHoverChange) {
+            const dest = mapDestinations.find(d => d.id === hoveredId);
+            onHoverChange(dest ? dest.slug : null);
+        }
+    }, [hoveredId, onHoverChange]);
 
     return (
         <section className="py-24 relative bg-white overflow-hidden">
