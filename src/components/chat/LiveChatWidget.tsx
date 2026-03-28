@@ -11,7 +11,30 @@ export default function LiveChatWidget() {
     const [inputText, setInputText] = useState('');
     const [sessionId, setSessionId] = useState<string | null>(null);
     const [isTyping, setIsTyping] = useState(false);
+    const [sending, setSending] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    // Persist session
+    useEffect(() => {
+        const savedSession = localStorage.getItem('elefriends_chat_session');
+        if (savedSession) setSessionId(savedSession);
+    }, []);
+
+    useEffect(() => {
+        if (sessionId) {
+            localStorage.setItem('elefriends_chat_session', sessionId);
+            // Fetch existing messages
+            const fetchExisting = async () => {
+                const { data } = await supabase
+                    .from('chat_messages')
+                    .select('*')
+                    .eq('session_id', sessionId)
+                    .order('created_at', { ascending: true });
+                if (data) setMessages(data);
+            };
+            fetchExisting();
+        }
+    }, [sessionId]);
 
     // Initial greeting if no chat is started
     useEffect(() => {
@@ -57,6 +80,7 @@ export default function LiveChatWidget() {
 
         const content = inputText.trim();
         setInputText('');
+        setSending(true);
 
         try {
             let activeSessionId = sessionId;
@@ -95,7 +119,8 @@ export default function LiveChatWidget() {
             
         } catch (error) {
             console.error('Error sending message:', error);
-            // Optionally remove the temp message to notify fail
+        } finally {
+            setSending(false);
         }
     };
 
@@ -188,10 +213,10 @@ export default function LiveChatWidget() {
                                 />
                                 <button 
                                     type="submit"
-                                    disabled={!inputText.trim()}
+                                    disabled={!inputText.trim() || sending}
                                     className="p-2.5 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 disabled:opacity-50 disabled:hover:bg-emerald-500 transition-colors"
                                 >
-                                    <Send className="w-4 h-4" />
+                                    {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                                 </button>
                             </form>
                         </div>
