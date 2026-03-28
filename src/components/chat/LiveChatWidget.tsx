@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, X, Send, Paperclip, User, Bot, Loader2 } from 'lucide-react';
+import { MessageSquare, X, Send, Paperclip, User, Loader2 } from 'lucide-react';
+import Image from 'next/image';
 import { supabase } from '@/lib/supabase/client';
 
 export default function LiveChatWidget() {
@@ -139,8 +140,14 @@ export default function LiveChatWidget() {
                         <div className="bg-[#0b1315] p-5 flex items-center justify-between text-white border-b border-white/10 shrink-0">
                             <div className="flex items-center gap-3">
                                 <div className="relative">
-                                    <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center">
-                                        <Bot className="w-5 h-5 text-white" />
+                                    <div className="w-10 h-10 rounded-full bg-emerald-100 overflow-hidden border-2 border-emerald-500/20">
+                                        <Image 
+                                            src="/img/agent_avatar.png" 
+                                            alt="Live Agent" 
+                                            width={40} 
+                                            height={40} 
+                                            className="object-cover"
+                                        />
                                     </div>
                                     <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-[#0b1315] rounded-full" />
                                 </div>
@@ -165,8 +172,14 @@ export default function LiveChatWidget() {
                                     className={`flex items-end gap-2 ${msg.sender_type === 'visitor' ? 'flex-row-reverse' : 'flex-row'}`}
                                 >
                                     {msg.sender_type === 'agent' && (
-                                        <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 mb-1">
-                                            <Bot className="w-3.5 h-3.5 text-emerald-600" />
+                                        <div className="w-6 h-6 rounded-full overflow-hidden border border-emerald-500/10 shrink-0 mb-1">
+                                            <Image 
+                                                src="/img/agent_avatar.png" 
+                                                alt="Agent" 
+                                                width={24} 
+                                                height={24} 
+                                                className="object-cover"
+                                            />
                                         </div>
                                     )}
                                     <div 
