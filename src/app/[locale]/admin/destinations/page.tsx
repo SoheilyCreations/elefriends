@@ -42,7 +42,15 @@ export default function AdminDestinations() {
             description: '',
             image: '',
             slug: '',
-            display_order: 0
+            display_order: 0,
+            insight_window_value: '',
+            insight_window_desc: '',
+            insight_climate_value: '',
+            insight_climate_desc: '',
+            insight_logistics_value: '',
+            insight_logistics_desc: '',
+            insight_geography_value: '',
+            insight_geography_desc: ''
         });
         setIsEditModalOpen(true);
     };
@@ -266,6 +274,88 @@ export default function AdminDestinations() {
                                         className="w-full bg-white border border-gray-200 rounded-[2rem] py-4 px-6 text-sm font-medium text-black focus:outline-none focus:ring-2 focus:ring-emerald-500/20 min-h-[150px] resize-none"
                                         placeholder="Describe what makes this place special..."
                                     />
+                                </div>
+
+                                {/* Essential Insights Section */}
+                                <div className="space-y-6 pt-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-[1px] bg-emerald-500" />
+                                        <h3 className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em]">Essential Insights</h3>
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        {/* Optimal Window */}
+                                        <div className="space-y-4 p-6 bg-white border border-gray-100 rounded-3xl">
+                                            <label className="text-[9px] font-black text-[#0b1315] uppercase tracking-widest block">Optimal Window</label>
+                                            <input
+                                                type="text"
+                                                value={selectedDestination.insight_window_value || ''}
+                                                onChange={(e) => setSelectedDestination({ ...selectedDestination, insight_window_value: e.target.value })}
+                                                className="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 px-4 text-xs font-bold"
+                                                placeholder="e.g. Feb — Oct"
+                                            />
+                                            <textarea
+                                                value={selectedDestination.insight_window_desc || ''}
+                                                onChange={(e) => setSelectedDestination({ ...selectedDestination, insight_window_desc: e.target.value })}
+                                                className="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 px-4 text-xs font-medium min-h-[80px] resize-none"
+                                                placeholder="Description..."
+                                            />
+                                        </div>
+
+                                        {/* Climate Profile */}
+                                        <div className="space-y-4 p-6 bg-white border border-gray-100 rounded-3xl">
+                                            <label className="text-[9px] font-black text-[#0b1315] uppercase tracking-widest block">Climate Profile</label>
+                                            <input
+                                                type="text"
+                                                value={selectedDestination.insight_climate_value || ''}
+                                                onChange={(e) => setSelectedDestination({ ...selectedDestination, insight_climate_value: e.target.value })}
+                                                className="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 px-4 text-xs font-bold"
+                                                placeholder="e.g. 29°C Average"
+                                            />
+                                            <textarea
+                                                value={selectedDestination.insight_climate_desc || ''}
+                                                onChange={(e) => setSelectedDestination({ ...selectedDestination, insight_climate_desc: e.target.value })}
+                                                className="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 px-4 text-xs font-medium min-h-[80px] resize-none"
+                                                placeholder="Description..."
+                                            />
+                                        </div>
+
+                                        {/* Logistics */}
+                                        <div className="space-y-4 p-6 bg-white border border-gray-100 rounded-3xl">
+                                            <label className="text-[9px] font-black text-[#0b1315] uppercase tracking-widest block">Logistics / Time</label>
+                                            <input
+                                                type="text"
+                                                value={selectedDestination.insight_logistics_value || ''}
+                                                onChange={(e) => setSelectedDestination({ ...selectedDestination, insight_logistics_value: e.target.value })}
+                                                className="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 px-4 text-xs font-bold"
+                                                placeholder="e.g. 4.5H Drive"
+                                            />
+                                            <textarea
+                                                value={selectedDestination.insight_logistics_desc || ''}
+                                                onChange={(e) => setSelectedDestination({ ...selectedDestination, insight_logistics_desc: e.target.value })}
+                                                className="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 px-4 text-xs font-medium min-h-[80px] resize-none"
+                                                placeholder="Description..."
+                                            />
+                                        </div>
+
+                                        {/* Geography */}
+                                        <div className="space-y-4 p-6 bg-white border border-gray-100 rounded-3xl">
+                                            <label className="text-[9px] font-black text-[#0b1315] uppercase tracking-widest block">Geography</label>
+                                            <input
+                                                type="text"
+                                                value={selectedDestination.insight_geography_value || ''}
+                                                onChange={(e) => setSelectedDestination({ ...selectedDestination, insight_geography_value: e.target.value })}
+                                                className="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 px-4 text-xs font-bold"
+                                                placeholder="e.g. Northern Plains"
+                                            />
+                                            <textarea
+                                                value={selectedDestination.insight_geography_desc || ''}
+                                                onChange={(e) => setSelectedDestination({ ...selectedDestination, insight_geography_desc: e.target.value })}
+                                                className="w-full bg-gray-50 border border-gray-100 rounded-xl py-3 px-4 text-xs font-medium min-h-[80px] resize-none"
+                                                placeholder="Description..."
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

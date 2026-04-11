@@ -3,17 +3,24 @@
 import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { CheckCircle2, ChevronRight, Lock, Wallet, Landmark, CreditCard, User, Phone, Mail, Clock, Calendar, Users, Home, Printer, Share2, Loader2, AlertCircle } from 'lucide-react';
+import { CheckCircle2, ChevronRight, Lock, Wallet, Landmark, CreditCard, User, Phone, Mail, Clock, Calendar, Users, Home, Printer, Share2, Loader2, AlertCircle, QrCode } from 'lucide-react';
 import Image from 'next/image';
 import { ElephantIcon } from '@/components/icons/ElephantIcon';
+import { QRCodeSVG } from 'qrcode.react';
 
 function CheckoutContent() {
     const searchParams = useSearchParams();
     const [isClient, setIsClient] = useState(false);
-    const [paymentMethod, setPaymentMethod] = useState<'cash' | 'bank' | 'card'>('cash');
+    const [paymentMethod, setPaymentMethod] = useState<'cash' | 'bank' | 'card' | 'hela'>('cash');
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    // HelaPay States
+    const [helaQRData, setHelaQRData] = useState<string | null>(null);
+    const [helaQRRef, setHelaQRRef] = useState<string | null>(null);
+    const [isGeneratingQR, setIsGeneratingQR] = useState(false);
+    const [pollingInterval, setPollingInterval] = useState<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         setIsClient(true);
@@ -29,6 +36,13 @@ function CheckoutContent() {
     const phone = searchParams.get('phone') || '';
     const total = searchParams.get('total') || '0';
     const advance = searchParams.get('advance') || '0';
+    const referenceId = `ELF-${Math.floor(100000 + Math.random() * 900000)}`;
+
+    useEffect(() => {
+        return () => {
+            if (pollingInterval) clearInterval(pollingInterval);
+        };
+    }, [pollingInterval]);
 
     if (!isClient) return null;
 
@@ -41,7 +55,54 @@ function CheckoutContent() {
         }
     };
 
-    const handleFinalSubmit = async () => {
+    const handleHelaPayInitiate = async () => {
+        try {
+            setIsGeneratingQR(true);
+            setError(null);
+            
+            const response = await fetch('/api/payment/helapay/generate-qr', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    amount: parseFloat(advance),
+                    reference: referenceId
+                })
+            });
+
+            const data = await response.json();
+            if (data.error) throw new Error(data.error);
+
+            setHelaQRData(data.qrData);
+            setHelaQRRef(data.qrReference);
+
+            // Start Polling
+            const interval = setInterval(async () => {
+                const statusRes = await fetch('/api/payment/helapay/status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        reference: referenceId,
+                        qrReference: data.qrReference
+                    })
+                });
+                const statusData = await statusRes.json();
+                
+                if (statusData.isSuccess) {
+                    clearInterval(interval);
+                    handleFinalSubmit(true); // Auto-submit with Success status
+                }
+            }, 3000);
+
+            setPollingInterval(interval);
+        } catch (err: any) {
+            console.error('HelaPay Initiate Error:', err);
+            setError('Could not generate HelaPay QR. Please try again.');
+        } finally {
+            setIsGeneratingQR(false);
+        }
+    };
+
+    const handleFinalSubmit = async (isHelaSuccess = false) => {
         try {
             setIsSubmitting(true);
             setError(null);
@@ -56,7 +117,8 @@ function CheckoutContent() {
                 pax: parseInt(guests),
                 total_price: parseFloat(total),
                 status: 'pending' as const,
-                payment_status: paymentMethod === 'card' ? 'unpaid' : 'unpaid' as const,
+                payment_status: (paymentMethod === 'card' || isHelaSuccess) ? 'paid' : 'unpaid' as const,
+                notes: paymentMethod === 'hela' ? `HelaPay Reference: ${referenceId}` : ''
             };
 
             // 2. Save to Supabase
@@ -308,6 +370,16 @@ function CheckoutContent() {
                                     <CreditCard className={`w-8 h-8 ${paymentMethod === 'card' ? 'text-emerald-500' : 'text-gray-400'}`} />
                                     <span className={`text-xs font-black uppercase tracking-wider ${paymentMethod === 'card' ? 'text-[#0b1315]' : 'text-gray-500'}`}>Card (Online)</span>
                                 </button>
+                                <button
+                                    onClick={() => {
+                                        setPaymentMethod('hela');
+                                        handleHelaPayInitiate();
+                                    }}
+                                    className={`p-5 rounded-2xl border-2 transition-all flex flex-col items-center gap-3 ${paymentMethod === 'hela' ? 'border-emerald-500 bg-emerald-50/50' : 'border-gray-100 hover:border-emerald-200'}`}
+                                >
+                                    <QrCode className={`w-8 h-8 ${paymentMethod === 'hela' ? 'text-emerald-500' : 'text-gray-400'}`} />
+                                    <span className={`text-xs font-black uppercase tracking-wider ${paymentMethod === 'hela' ? 'text-[#0b1315]' : 'text-gray-500'}`}>HelaPay QR</span>
+                                </button>
                             </div>
 
                             {/* Payment Method Specific Content */}
@@ -366,6 +438,39 @@ function CheckoutContent() {
                                         </div>
                                     </div>
                                 )}
+
+                                {paymentMethod === 'hela' && (
+                                    <div className="flex flex-col items-center justify-center p-6 bg-white border border-gray-100 rounded-3xl space-y-4">
+                                        <div className="text-center">
+                                            <h4 className="font-black text-sm text-[#0b1315] uppercase tracking-tight">Scan with HelaPay</h4>
+                                            <p className="text-[10px] text-gray-400 font-medium">To pay the 25% advance of ${advance}</p>
+                                        </div>
+                                        
+                                        <div className="relative p-6 bg-white rounded-2xl shadow-inner border border-gray-50">
+                                            {isGeneratingQR ? (
+                                                <div className="w-[180px] h-[180px] flex items-center justify-center">
+                                                    <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
+                                                </div>
+                                            ) : helaQRData ? (
+                                                <QRCodeSVG value={helaQRData} size={180} />
+                                            ) : (
+                                                <div className="w-[180px] h-[180px] flex flex-col items-center justify-center text-center gap-2">
+                                                    <AlertCircle className="text-gray-300" />
+                                                    <span className="text-[9px] text-gray-300 font-bold uppercase tracking-widest leading-tight">Error generating QR</span>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 rounded-full">
+                                            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                                            <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest">Waiting for payment...</span>
+                                        </div>
+
+                                        <p className="text-[9px] text-gray-400 text-center max-w-[200px]">
+                                            Open Helakuru app, tap Scan & Pay, then scan this QR code.
+                                        </p>
+                                    </div>
+                                )}
                             </div>
 
                             <button
@@ -379,7 +484,12 @@ function CheckoutContent() {
                                 ) : (
                                     <CheckCircle2 className="w-5 h-5 text-emerald-400" />
                                 )}
-                                {isSubmitting ? 'Confirming...' : (paymentMethod === 'cash' ? 'Confirm Booking' : paymentMethod === 'bank' ? 'I Have Transferred' : 'Pay & Confirm')}
+                                {isSubmitting ? 'Confirming...' : (
+                                    paymentMethod === 'cash' ? 'Confirm Booking' : 
+                                    paymentMethod === 'bank' ? 'I Have Transferred' : 
+                                    paymentMethod === 'hela' ? 'HelaPay QR - Polling...' : 
+                                    'Pay & Confirm'
+                                )}
                             </button>
                         </div>
                     </div>

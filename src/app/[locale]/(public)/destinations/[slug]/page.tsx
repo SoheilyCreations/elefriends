@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { Destination, Tour } from '@/types';
 import { destinationService } from '@/lib/services/destinationService';
 import { tourService } from '@/lib/services/tourService';
-import { Loader2, ArrowLeft, MapPin, Calendar, Users, ArrowRight, Sun, Wind, Mountain, PawPrint, Sparkles, PhoneCall, Compass, Camera, Globe, Clock, Thermometer } from 'lucide-react';
+import { Loader2, ArrowLeft, MapPin, Calendar, Users, ArrowRight, Sun, Wind, Mountain, PawPrint, Sparkles, PhoneCall, Compass, Camera, Globe, Clock, Thermometer, Binoculars, Ticket } from 'lucide-react';
 import Image from 'next/image';
 import { Link } from '@/i18n/routing';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -166,10 +166,7 @@ export default function DestinationDetail() {
                                     <p className="text-gray-500 text-lg md:text-xl leading-[1.8] font-medium tracking-tight max-w-4xl">
                                         {destination.description || `Experience the breathtaking beauty and rich biodiversity of ${destination.title}. A destination where nature and civilization maintain a delicate, ancient balance.`}
                                     </p>
-                                    <div className="mt-8 flex gap-3">
-                                        <div className="px-4 py-1.5 rounded-full border border-gray-100 text-[8px] font-black uppercase tracking-widest text-gray-400">Ancient Biosphere</div>
-                                        <div className="px-4 py-1.5 rounded-full border border-gray-100 text-[8px] font-black uppercase tracking-widest text-gray-400">UNESCO Site</div>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -180,13 +177,33 @@ export default function DestinationDetail() {
                                 <div className="w-4 h-[1px] bg-emerald-500" />
                                 <span className="text-emerald-500 font-black text-[9px] uppercase tracking-[0.4em]">Essential Insights</span>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {[
-                                    { icon: Sun, label: 'Optimal Window', value: 'Feb — Oct', desc: 'The dry season offers peak wildlife congregation near water sources.' },
-                                    { icon: Thermometer, label: 'Climate Profile', value: '29°C Average', desc: 'Tropical warmth with refreshing mist during the dawn hours.' },
-                                    { icon: Clock, label: 'Logistics/Time', value: '4.5H Drive', desc: 'A scenic journey from Colombo through the heart of the dry zone.' },
-                                    { icon: MapPin, label: 'Geography', value: 'Northern Plains', desc: destination.subtitle || 'A unique biosphere of dry-evergreen forests and sprawling villus.' }
-                                ].map((pill, i) => (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {[
+                                        { 
+                                            icon: Sun, 
+                                            label: 'Optimal Window', 
+                                            value: destination.insight_window_value || 'Feb — Oct', 
+                                            desc: destination.insight_window_desc || 'The dry season offers peak wildlife congregation near water sources.' 
+                                        },
+                                        { 
+                                            icon: Thermometer, 
+                                            label: 'Climate Profile', 
+                                            value: destination.insight_climate_value || '29°C Average', 
+                                            desc: destination.insight_climate_desc || 'Tropical warmth with refreshing mist during the dawn hours.' 
+                                        },
+                                        { 
+                                            icon: Clock, 
+                                            label: 'Logistics/Time', 
+                                            value: destination.insight_logistics_value || '4.5H Drive', 
+                                            desc: destination.insight_logistics_desc || 'A scenic journey from Colombo through the heart of the dry zone.' 
+                                        },
+                                        { 
+                                            icon: MapPin, 
+                                            label: 'Geography', 
+                                            value: destination.insight_geography_value || 'Northern Plains', 
+                                            desc: destination.insight_geography_desc || destination.subtitle || 'A unique biosphere of dry-evergreen forests and sprawling villus.' 
+                                        }
+                                    ].map((pill, i) => (
                                     <motion.div 
                                         key={i}
                                         initial={{ opacity: 0, y: 10 }}
@@ -273,28 +290,28 @@ export default function DestinationDetail() {
                                                 fill
                                                 className="object-cover transition-transform duration-1000 group-hover:scale-110 opacity-90 group-hover:opacity-100"
                                             />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-[#0b1315] via-[#0b1315]/40 to-transparent" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-[#0b1315] via-[#0b1315]/50 to-transparent" />
                                             
                                             <div className="absolute top-10 right-10 flex flex-col items-end gap-2 text-right">
-                                                <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl px-6 py-3">
-                                                    <span className="text-emerald-400 font-extrabold text-lg tracking-tight">${tour.price}</span>
+                                                <div className="bg-[#0b1315]/60 backdrop-blur-xl border border-white/10 rounded-2xl px-6 py-3">
+                                                    <span className="text-emerald-400 font-extrabold text-xl tracking-tight">${tour.price}</span>
                                                 </div>
-                                                <span className="text-[8px] font-black text-white/40 uppercase tracking-[0.2em]">Starting Per Adult</span>
+                                                <span className="text-[9px] font-black text-white/70 uppercase tracking-[0.2em]">Starting Per Adult</span>
                                             </div>
 
                                             <div className="absolute bottom-12 left-12 right-12 space-y-6">
                                                 <div className="space-y-2">
-                                                    <span className="text-emerald-500 font-black text-[9px] uppercase tracking-[0.4em]">Signature Safari</span>
+                                                    <span className="text-emerald-500 font-black text-[10px] uppercase tracking-[0.4em] drop-shadow-sm">Signature Safari</span>
                                                     <h4 className="text-2xl font-black text-white uppercase tracking-tight leading-none group-hover:text-emerald-400 transition-colors">
                                                         {tour.title}
                                                     </h4>
                                                 </div>
                                                 <div className="flex items-center gap-6 text-white/60">
-                                                    <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest bg-white/5 rounded-full px-4 py-2 border border-white/10">
+                                                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest bg-white/15 backdrop-blur-md rounded-full px-5 py-2.5 border border-white/10">
                                                         <Calendar size={14} className="text-emerald-500" />
                                                         {tour.duration}
                                                     </div>
-                                                    <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest bg-white/5 rounded-full px-4 py-2 border border-white/10">
+                                                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest bg-white/15 backdrop-blur-md rounded-full px-5 py-2.5 border border-white/10">
                                                         <Users size={14} className="text-emerald-500" />
                                                         {tour.max_guests} Guests
                                                     </div>
@@ -315,16 +332,38 @@ export default function DestinationDetail() {
                     {/* Minimalist Sticky Sidebar */}
                     <div className="lg:col-span-4 lg:sticky lg:top-32 h-fit">
                         <div className="bg-white border border-gray-100 p-10 md:p-12 rounded-[3.5rem] shadow-2xl shadow-[#0b1315]/5 relative overflow-hidden group">
-                           <div className="relative z-10 space-y-10">
+                            <div className="relative z-10 space-y-10">
                                 <div className="w-16 h-16 rounded-[2rem] bg-emerald-50 flex items-center justify-center transition-transform group-hover:rotate-12 duration-500">
                                     <Compass className="w-8 h-8 text-emerald-500" />
                                 </div>
                                 <div className="space-y-4">
                                     <h3 className="text-3xl font-black text-[#0b1315] uppercase tracking-tighter leading-none">Tailor Your <br /> Safari Story</h3>
-                                    <p className="text-gray-400 font-medium leading-[1.6] text-sm md:text-base">
-                                        Looking for a specialized wildlife sequence? Our experts curate itineraries specifically for {destination.title}.
-                                    </p>
                                 </div>
+                                
+                                <div className="space-y-4">
+                                        <div className="flex items-start gap-4 p-5 rounded-3xl bg-emerald-50 border border-emerald-100/50 group/item hover:bg-emerald-100 transition-colors duration-500">
+                                            <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-emerald-500 shadow-sm group-hover/item:scale-110 transition-transform">
+                                                <Ticket size={22} className="group-hover/item:rotate-12 transition-transform" />
+                                            </div>
+                                            <div className="flex-1">
+                                                <p className="text-[#0b1315] font-extrabold text-[13px] uppercase tracking-tight leading-none mb-1">Limited Daily Entries</p>
+                                                <p className="text-emerald-600 font-bold text-[11px] leading-tight opacity-80">Secure your safari spot now.</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-start gap-4 p-5 rounded-3xl bg-emerald-50 border border-emerald-100/50 group/item hover:bg-emerald-100 transition-colors duration-500">
+                                            <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-emerald-500 shadow-sm group-hover/item:scale-110 transition-transform">
+                                                <Binoculars size={22} className="group-hover/item:-rotate-12 transition-transform" />
+                                            </div>
+                                            <div className="flex-1">
+                                                <div className="flex items-center gap-1.5 mb-1">
+                                                    <p className="text-[#0b1315] font-extrabold text-[13px] uppercase tracking-tight leading-none">98% Success Rate</p>
+                                                    <Sparkles size={12} className="text-emerald-500 animate-pulse" />
+                                                </div>
+                                                <p className="text-emerald-600 font-bold text-[11px] leading-tight opacity-80">For Elephant sightings.</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 <div className="space-y-4 pt-6 text-[10px] font-black text-[#0b1315]/40 uppercase tracking-[0.2em]">
                                     <div className="flex items-center gap-4">
                                         <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">

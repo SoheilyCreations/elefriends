@@ -7,6 +7,14 @@ export interface Destination {
     images?: string[];
     slug: string;
     display_order?: number;
+    insight_window_value?: string;
+    insight_window_desc?: string;
+    insight_climate_value?: string;
+    insight_climate_desc?: string;
+    insight_logistics_value?: string;
+    insight_logistics_desc?: string;
+    insight_geography_value?: string;
+    insight_geography_desc?: string;
     created_at: string;
 }
 
